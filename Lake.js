@@ -2,7 +2,7 @@
  * @Author: sznews
  * @Date:   2018-12-21 09:18:20
  * @Last Modified by:   sznews
- * @Last Modified time: 2019-01-31 17:01:40
+ * @Last Modified time: 2019-02-19 15:56:13
  */
 var timer;
 /**
@@ -32,21 +32,22 @@ _ = {
             dataType: param.type || 'json',
             data: param.data || '',
             success: function(res) {
-                //请求成功
-                if (0 === res.status) {
+                // 请求成功
+                // if (0 === res.status) {
                     typeof param.success === 'function' && param.success(res.data, res.msg);
-                }
+                // }
                 //如果没有登录状态，需要强制登录
-                else if (10 === res.status) {
-                    _this.doLogin;
-                }
+                // else if (10 === res.status) {
+                //     _this.doLogin;
+                // }
                 //请求数据错误
-                else if (1 === res.status) {
-                    typeof param.error === 'function' && param.error(res.msg);
-                }
+                // else if (1 === res.status) {
+                //     typeof param.error === 'function' && param.error(res.msg);
+                // }
+                // typeof param.success === 'function' && param.success(res);
             },
             error: function(err) {
-                typeof param.error === 'function' && param.error(err.statusText);
+                typeof param.error === 'function' && param.error(err);
             }
         });
     },
@@ -169,5 +170,27 @@ _ = {
                 }
             }
         return fmt;
+    },
+    /**
+     * 接收后台发过来的二进制数据流
+     * （用于接收后台图片验证码）
+     */
+    getImageSteam:function(url,imgid){
+        var xhr =new XMLHttpRequest();
+        xhr.open('get',url,true);
+        // 设置后台返回数据类型，blod为二进制封装类型
+        xhr.responseType='blob';
+        xhr.onload=function(){
+            if(this.status==200){
+                var blob=this.response;
+                var img=document.getElementById(imgid);
+                // 图片加载完后消除blod，如果不消除就会导致页面性能减慢
+                img.onload=function(e){
+                    window.URL.revokeObjectURL(blob);
+                };
+                img.src=window.URL.createObjectURL(blob);
+            }
+        }
+        xhr.send();
     }
 }
