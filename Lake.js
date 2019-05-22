@@ -1,10 +1,12 @@
 /*
  * @Author: sznews
  * @Date:   2018-12-21 09:18:20
- * @Last Modified by:   sznews
- * @Last Modified time: 2019-02-19 15:56:13
+ * @Last Modified by:   xiaoy
+ * @Last Modified time: 2019-05-22 23:38:08
  */
 var timer;
+// 全局上下文this
+var context=this;
 /**
  * @Author   Lake
  * @DateTime 2018-12-29
@@ -21,6 +23,23 @@ function printWord(objdom, str, i) {
         objdom.innerHTML = str;
         clearTimeout(timer);
     }
+}
+/**
+ * [throttle description]
+ * @Author   Lake
+ * @DateTime 2019-02-25T21:29:47+0800
+ * @param    {[function]}                 method [需要时间节流的方法]
+ * @param    {[time]}                     delay  [节流事件（以毫秒算）]
+ * @return   {null}                     
+ */
+function throttle(method,delay){
+	var timer=null;
+	if(timer){
+		clearTimeout(timer)
+	}
+	timer=setTimeout(function(){
+		method();
+	}, delay)
 }
 _ = {
     //网络请求
@@ -192,5 +211,39 @@ _ = {
             }
         }
         xhr.send();
+    },
+    /**
+     * [throttle description]
+     * @Author   Lake
+     * @DateTime 2019-02-25T21:29:47+0800
+     * @param    {[function]}                 method [需要时间节流的方法]
+     * @param    {[time]}                     delay  [节流事件（以毫秒算）]
+     * @return   {null}                     
+     */
+    throttle:function(method,delay){
+    	var timer=null;
+    	if(timer){
+    		clearTimeout(timer)
+    	}
+    	timer=setTimeout(function(){
+    		method();
+    	}, delay)
+    },
+    /**
+     * 传入的字符串根据条件转码或解码
+     * @Author   Lake
+     * @DateTime 2019-05-22T22:51:31+0800
+     * @param    {[string]}                 strType [输入操作类型，encode是转码，decode是解码]
+     * @param    {[string]}                 str     [转码或解码的字符串]
+     * @return   {[string]}                         [转码或解码后的字符串]
+     */
+    uriCodeHandler:function(strType,str){
+    	if(strType==='encode'){
+    		return encodeURIComponent(str)
+    	}else if(strType==='decode'){
+    		return decodeURIComponent(str)
+    	}else{
+    		throw '请输入encode或者decode'
+    	}
     }
 }
