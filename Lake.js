@@ -2,7 +2,7 @@
  * @Author: sznews
  * @Date:   2018-12-21 09:18:20
  * @Last Modified by:   xiaoy
- * @Last Modified time: 2019-05-22 23:38:08
+ * @Last Modified time: 2019-05-23 00:17:39
  */
 var timer;
 // 全局上下文this
@@ -238,12 +238,26 @@ _ = {
      * @return   {[string]}                         [转码或解码后的字符串]
      */
     uriCodeHandler:function(strType,str){
-    	if(strType==='encode'){
-    		return encodeURIComponent(str)
-    	}else if(strType==='decode'){
-    		return decodeURIComponent(str)
+    	//如果输入的参数为string类型
+    	if('string'===typeof str&&strType==='encode'){
+	    	return encodeURIComponent(str)
+	    }else if('string'===typeof str&&strType==='decode'){
+	    	return decodeURIComponent(str)
+    	}else if('object'===typeof str && strType==='encode'){
+    		let newobj={}
+    		for(let key in str){
+    			newobj[key]=encodeURIComponent(str[key])
+    		}
+    		return newobj
+    	}else if('object'===typeof str && strType==='decode'){
+    		let newobj={}
+    		for(let key in str){
+    			newobj[key]=decodeURIComponent(str[key])
+    		}
+    		return newobj
     	}else{
-    		throw '请输入encode或者decode'
+    		throw '请输入字符串或对象类型和正确的操作类型'
     	}
+    	
     }
 }

@@ -3,10 +3,16 @@
 <head>
 	<title>LakeUtil测试</title>
 	<meta charset="utf-8">
-	<script type="text/javascript" src="./Lake.js"></script>
+	<script type="text/javascript" src="./Lake.min.js"></script>
 	<script type="text/javascript">
 		var strEncode='我是谁'
 		console.log(_.uriCodeHandler('encode',strEncode))
+
+		var obj={
+			name:'我是谁',
+			world:'红番区'
+		}
+		console.log(_.uriCodeHandler('encode',obj))
 	</script>
 </head>
 <body>
