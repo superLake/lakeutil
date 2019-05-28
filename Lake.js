@@ -2,7 +2,7 @@
  * @Author: sznews
  * @Date:   2018-12-21 09:18:20
  * @Last Modified by:   xiaoy
- * @Last Modified time: 2019-05-23 00:17:39
+ * @Last Modified time: 2019-05-28 23:37:40
  */
 var timer;
 // 全局上下文this
@@ -133,7 +133,7 @@ _ = {
     /**
      * 参数验证
      */
-    validate: function(value, type) {
+    validate: function(value, type, num=0) {
         var value = $.trim(value);
         //非空验证
         if ('require' === type) {
@@ -153,9 +153,14 @@ _ = {
             return /[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}/.test(value);
         }
         //身份证验证
-        if ('idnum' === type) {
+        if ('idcard' === type) {
             return /^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|[xX])$/.test(value);
         }
+        //
+        if('wordnum'===type){
+        	return !!(value.length>num)
+        }
+
     },
     /**
      * 日期格式化
@@ -240,13 +245,13 @@ _ = {
     uriCodeHandler:function(strType,str){
     	//如果输入的参数为string类型
     	if('string'===typeof str&&strType==='encode'){
-	    	return encodeURIComponent(str)
+	    	return this.urlencode(str)
 	    }else if('string'===typeof str&&strType==='decode'){
 	    	return decodeURIComponent(str)
     	}else if('object'===typeof str && strType==='encode'){
     		let newobj={}
     		for(let key in str){
-    			newobj[key]=encodeURIComponent(str[key])
+    			newobj[key]=this.urlencode(str[key])
     		}
     		return newobj
     	}else if('object'===typeof str && strType==='decode'){
@@ -259,5 +264,33 @@ _ = {
     		throw '请输入字符串或对象类型和正确的操作类型'
     	}
     	
+    },
+    /**
+     * 由于js内部机制问题，有部分字符没有进行URLencode，下面方法为了解决这个问题
+     * @Author   Lake
+     * @DateTime 2019-05-28T22:27:27+0800
+     * @param    {[string]}                 str [需要URLencode的字符串]
+     * @return   {[string]}                     [URL后的字符串]
+     */
+    urlencode:function(str){
+    	return encodeURIComponent(str)
+    	.replace(/!/g,'%21')
+        .replace(/'/g,'%27')
+        .replace(/\(/g,'%28')
+        .replace(/\)/g,'%29')
+        .replace(/\*/g,'%2A')
+        .replace(/~/g,'%7E')
+        .replace(/%20/g,'+')
+    },
+    /**
+     * 获取当前
+     * @Author   Lake
+     * @DateTime 2019-05-28T22:33:49+0800
+     * @return   {[type]}                 [description]
+     */
+    getTimeStamp:function(){
+    	var nowTime= Date.parse(new Date()).toString()
+    	nowTime=nowTime.substr(0,10)
+    	return nowTime
     }
 }

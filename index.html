@@ -3,16 +3,19 @@
 <head>
 	<title>LakeUtil测试</title>
 	<meta charset="utf-8">
+	<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 	<script type="text/javascript" src="./Lake.min.js"></script>
 	<script type="text/javascript">
 		var strEncode='我是谁'
 		console.log(_.uriCodeHandler('encode',strEncode))
 
 		var obj={
-			name:'我是谁',
-			world:'红番区'
+			name:'!~我是谁',
+			world:'(红番区)'
 		}
 		console.log(_.uriCodeHandler('encode',obj))
+		console.log(_.getTimeStamp())
+		console.log(_.validate('我是谁','wordnum',2))
 	</script>
 </head>
 <body>
